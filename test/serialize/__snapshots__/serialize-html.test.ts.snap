@@ -9,3 +9,13 @@ exports[`Serializing content with invalid markup results in escaped markup 1`] =
 "&lt;Box&gt;I have html&lt;/Box&gt;
 "
 `;
+
+exports[`Serializing content with single quote is not double escaped 1`] = `
+"&lt;Box&gt;I&#39;ve html&lt;/Box&gt;
+"
+`;
+
+exports[`Serializing content with single quote is not escaped 1`] = `
+"&lt;Box&gt;I&#39;ve html&lt;/Box&gt;
+"
+`;

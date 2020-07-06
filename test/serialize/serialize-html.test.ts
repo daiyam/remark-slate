@@ -25,3 +25,33 @@ it('Serializing content with invalid markup results in escaped markup', () => {
     })
   ).toMatchSnapshot();
 });
+
+it('Serializing content with single quote is not double escaped', () => {
+  expect(
+    serialize({
+      children: [
+        {
+          type: defaultNodeTypes.paragraph,
+          children: [
+            {
+              text: `<Box>I've html</Box>`,
+            }
+          ]
+        }
+      ]
+    } as any)
+  ).toMatchSnapshot();
+});
+
+it('Serializing content with single quote is not escaped', () => {
+  expect(
+    serialize({
+      type: defaultNodeTypes.paragraph,
+      children: [
+        {
+          text: `<Box>I've html</Box>`,
+        },
+      ],
+    })
+  ).toMatchSnapshot();
+});

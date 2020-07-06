@@ -1,6 +1,6 @@
 {
   "name": "remark-slate",
-  "version": "1.1.1",
+  "version": "1.1.1+0.1.0",
   "description": "remark plugin to compile Markdown to a slate compatible object",
   "license": "MIT",
   "module": "dist/remark-slate-ts.esm.js",
@@ -24,7 +24,7 @@
     "text editor"
   ],
   "repository": "hanford/remark-slate",
-  "bugs": "https://github.com/hanford/remark-slate/issues",
+  "bugs": "https://github.com/daiyam/remark-slate/issues",
   "author": "Jack Hanford <jackhanford@gmail.com> (https://jackhanford.com)",
   "contributors": [
     "Jack Hanford <jackhanford@gmail.com> (https://jackhanford.com)",

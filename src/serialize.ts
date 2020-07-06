@@ -24,6 +24,10 @@ interface Options {
   ignoreParagraphNewline?: boolean;
 }
 
+const isBlockNode = (node: BlockType | LeafType): node is BlockType => {
+  return Array.isArray((node as BlockType).children);
+};
+
 const isLeafNode = (node: BlockType | LeafType): node is LeafType => {
   return typeof (node as LeafType).text === 'string';
 };
@@ -56,7 +60,7 @@ export default function serialize(
 
   let children = text;
 
-  if (!isLeafNode(chunk)) {
+  if (isBlockNode(chunk)) {
     children = chunk.children
       .map((c: BlockType | LeafType) => {
         const isList = !isLeafNode(c)
@@ -76,13 +80,9 @@ export default function serialize(
         //    { text: '' }
         //  ]
         // }
-        let childrenHasLink = false;
-
-        if (!isLeafNode(chunk) && Array.isArray(chunk.children)) {
-          childrenHasLink = chunk.children.some(
-            (f) => !isLeafNode(f) && f.type === 'link'
-          );
-        }
+        const childrenHasLink = chunk.children.some(
+          (f) => !isLeafNode(f) && f.type === 'link'
+        );
 
         return serialize(
           { ...c, parentType: type },
@@ -195,7 +195,12 @@ export default function serialize(
       return `${children}\n`;
 
     default:
-      return escapeHtml(children);
+      if(isLeafNode(chunk)) {
+        return escapeHtml(children);
+      }
+      else {
+        return children;
+      }
   }
 }
 
