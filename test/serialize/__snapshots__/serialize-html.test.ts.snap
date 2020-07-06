@@ -5,17 +5,27 @@ exports[`Serializing content with HTML results in escaped HTML 1`] = `
 "
 `;
 
+exports[`Serializing content with allowed markup results in not-striped markup 1`] = `
+"I&#39;ve html
+"
+`;
+
 exports[`Serializing content with invalid markup results in escaped markup 1`] = `
 "&lt;Box&gt;I have html&lt;/Box&gt;
 "
 `;
 
-exports[`Serializing content with single quote is not double escaped 1`] = `
+exports[`Serializing content with invalid markup results in striped markup 1`] = `
+"I've html
+"
+`;
+
+exports[`Serializing content with single quote results in escaped quote 1`] = `
 "&lt;Box&gt;I&#39;ve html&lt;/Box&gt;
 "
 `;
 
-exports[`Serializing content with single quote is not escaped 1`] = `
+exports[`Serializing content with single quote results in not-double escaped quote 1`] = `
 "&lt;Box&gt;I&#39;ve html&lt;/Box&gt;
 "
 `;

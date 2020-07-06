@@ -26,7 +26,7 @@ it('Serializing content with invalid markup results in escaped markup', () => {
   ).toMatchSnapshot();
 });
 
-it('Serializing content with single quote is not double escaped', () => {
+it('Serializing content with single quote results in not-double escaped quote', () => {
   expect(
     serialize({
       children: [
@@ -43,7 +43,7 @@ it('Serializing content with single quote is not double escaped', () => {
   ).toMatchSnapshot();
 });
 
-it('Serializing content with single quote is not escaped', () => {
+it('Serializing content with single quote results in escaped quote', () => {
   expect(
     serialize({
       type: defaultNodeTypes.paragraph,
@@ -52,6 +52,37 @@ it('Serializing content with single quote is not escaped', () => {
           text: `<Box>I've html</Box>`,
         },
       ],
+    })
+  ).toMatchSnapshot();
+});
+
+it('Serializing content with invalid markup results in striped markup', () => {
+  expect(
+    serialize({
+      type: defaultNodeTypes.paragraph,
+      children: [
+        {
+          text: `<Box>I've html</Box>`,
+        },
+      ],
+    }, {
+      stripTags: true
+    })
+  ).toMatchSnapshot();
+});
+
+it('Serializing content with allowed markup results in not-striped markup', () => {
+  expect(
+    serialize({
+      type: defaultNodeTypes.paragraph,
+      children: [
+        {
+          text: `<Box>I've html</Box>`,
+        },
+      ],
+    }, {
+      stripTags: true,
+      allowedTags: ['Box']
     })
   ).toMatchSnapshot();
 });

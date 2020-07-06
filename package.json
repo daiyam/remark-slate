@@ -36,7 +36,8 @@
   ],
   "dependencies": {
     "@types/escape-html": "^1.0.0",
-    "escape-html": "^1.0.3"
+    "escape-html": "^1.0.3",
+    "striptags": "^3.1.1"
   },
   "devDependencies": {
     "eslint-plugin-prettier": "^3.1.3",

@@ -1,4 +1,5 @@
 import escapeHtml from 'escape-html';
+import striptags from 'striptags';
 
 import { defaultNodeTypes, NodeTypes } from './deserialize';
 
@@ -19,9 +20,12 @@ export interface BlockType {
 }
 
 interface Options {
-  nodeTypes: NodeTypes;
+  nodeTypes?: NodeTypes;
   listDepth?: number;
   ignoreParagraphNewline?: boolean;
+  stripTags?: boolean;
+  allowedTags?: Array<string>;
+  tagReplacement?: string;
 }
 
 const isBlockNode = (node: BlockType | LeafType): node is BlockType => {
@@ -36,12 +40,14 @@ const BREAK_TAG = '<br>';
 
 export default function serialize(
   chunk: BlockType | LeafType,
-  opts: Options = { nodeTypes: defaultNodeTypes }
+  opts: Options = {}
 ) {
   const {
     nodeTypes: userNodeTypes = defaultNodeTypes,
     ignoreParagraphNewline = false,
     listDepth = 0,
+    allowedTags = [],
+    tagReplacement = ''
   } = opts;
 
   let text = (chunk as LeafType).text || '';
@@ -88,6 +94,9 @@ export default function serialize(
           { ...c, parentType: type },
           {
             nodeTypes,
+            stripTags: opts.stripTags,
+            allowedTags,
+            tagReplacement,
             // WOAH.
             // what we're doing here is pretty tricky, it relates to the block below where
             // we check for ignoreParagraphNewline and set type to paragraph.
@@ -196,7 +205,18 @@ export default function serialize(
 
     default:
       if(isLeafNode(chunk)) {
-        return escapeHtml(children);
+        if(opts.stripTags) {
+          if(allowedTags.length === 0) {
+            // don't escape quotes since no tags are allowed
+            return striptags(children, allowedTags, tagReplacement);
+          }
+          else {
+            return escapeHtml(striptags(children, allowedTags, tagReplacement));
+          }
+        }
+        else {
+          return escapeHtml(children);
+        }
       }
       else {
         return children;
