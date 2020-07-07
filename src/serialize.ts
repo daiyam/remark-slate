@@ -40,15 +40,19 @@ const BREAK_TAG = '<br>';
 
 export default function serialize(
   chunk: BlockType | LeafType,
-  opts: Options = {}
+  opts: Options = {},
+  topNL: boolean = false
 ) {
   const {
     nodeTypes: userNodeTypes = defaultNodeTypes,
     ignoreParagraphNewline = false,
-    listDepth = 0,
     allowedTags = [],
     tagReplacement = ''
   } = opts;
+
+  let {
+    listDepth = 0,
+  } = opts
 
   let text = (chunk as LeafType).text || '';
   let type = (chunk as BlockType).type || '';
@@ -62,13 +66,17 @@ export default function serialize(
     },
   };
 
-  const LIST_TYPES = [nodeTypes.ul_list, nodeTypes.ol_list];
-
   let children = text;
 
   if (isBlockNode(chunk)) {
+    const LIST_TYPES = [nodeTypes.ul_list, nodeTypes.ol_list];
+
+    if(!type) {
+      --listDepth;
+    }
+
     children = chunk.children
-      .map((c: BlockType | LeafType) => {
+      .map((c: BlockType | LeafType, i: number) => {
         const isList = !isLeafNode(c)
           ? LIST_TYPES.includes(c.type || '')
           : false;
@@ -116,7 +124,10 @@ export default function serialize(
             listDepth: LIST_TYPES.includes((c as BlockType).type || '')
               ? listDepth + 1
               : listDepth,
-          }
+          },
+          /* !(!type && i === 0) */
+          // !(isList || (!type && i === 0))
+          i !== 0
         );
       })
       .join('');
@@ -126,10 +137,12 @@ export default function serialize(
   if (
     !ignoreParagraphNewline &&
     (text === '' || text === '\n') &&
-    chunk.parentType === nodeTypes.paragraph
+    chunk.parentType === nodeTypes.paragraph &&
+    (chunk as BlockType).break
   ) {
     type = 'paragraph';
     children = BREAK_TAG;
+    topNL = false
   }
 
   if (children === '') return;
@@ -161,30 +174,30 @@ export default function serialize(
 
   switch (type) {
     case nodeTypes.heading[1]:
-      return `# ${children}\n`;
+      return `${printNewBlock(topNL)}# ${children}\n`;
     case nodeTypes.heading[2]:
-      return `## ${children}\n`;
+      return `${printNewBlock(topNL)}## ${children}\n`;
     case nodeTypes.heading[3]:
-      return `### ${children}\n`;
+      return `${printNewBlock(topNL)}### ${children}\n`;
     case nodeTypes.heading[4]:
-      return `#### ${children}\n`;
+      return `${printNewBlock(topNL)}#### ${children}\n`;
     case nodeTypes.heading[5]:
-      return `##### ${children}\n`;
+      return `${printNewBlock(topNL)}##### ${children}\n`;
     case nodeTypes.heading[6]:
-      return `###### ${children}\n`;
+      return `${printNewBlock(topNL)}###### ${children}\n`;
 
     case nodeTypes.block_quote:
       // For some reason, marked is parsing blockquotes w/ one new line
       // as contiued blockquotes, so adding two new lines ensures that doesn't
       // happen
-      return `> ${children}\n\n`;
+      return `${printNewBlock(topNL)}> ${children}\n`;
 
     case nodeTypes.link:
       return `[${children}](${(chunk as BlockType).link || ''})`;
 
     case nodeTypes.ul_list:
     case nodeTypes.ol_list:
-      return `\n${children}\n`;
+      return `${printNewBlock(topNL)}${children}\n`;
 
     case nodeTypes.listItem:
       const isOL = chunk && chunk.parentType === 'ol_list';
@@ -201,7 +214,7 @@ export default function serialize(
       return `${spacer}${isOL ? '1.' : '-'} ${children}`;
 
     case nodeTypes.paragraph:
-      return `${children}\n`;
+      return `${printNewBlock(topNL)}${children}\n`;
 
     default:
       if(isLeafNode(chunk)) {
@@ -249,4 +262,13 @@ function retainWhitespaceAndFormat(string: string, format: string) {
 
   // and replace the non-whitespace content of the string
   return string.replace(frozenString, formattedString);
+}
+
+function printNewBlock(top: boolean): string {
+  if(top) {
+    return '\n'
+  }
+  else {
+    return ''
+  }
 }

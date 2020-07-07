@@ -1,7 +1,12 @@
 import { serialize, defaultNodeTypes } from '../../src';
 
 it('Serializes large slate object into markdown document', () => {
-  expect(slateTree.map((v) => serialize(v)).join('')).toMatchSnapshot();
+  // expect(slateTree.map((v) => serialize(v)).join('')).toMatchSnapshot();
+  expect(
+    serialize({
+      children: slateTree
+    } as any)
+  ).toMatchSnapshot();
 });
 
 const slateTree = [
