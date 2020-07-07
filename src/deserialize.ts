@@ -127,6 +127,9 @@ export default function deserialize(
         ...persistLeafFormats(children),
       };
 
+    case 'break':
+      return { text: '\n' };
+
     case 'text':
     default:
       return { text: node.value || '' };
