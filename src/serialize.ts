@@ -14,7 +14,7 @@ export interface LeafType {
 export interface BlockType {
   type: string;
   parentType?: string;
-  link?: string;
+  url?: string;
   break?: boolean;
   children: Array<BlockType | LeafType>;
 }
@@ -95,7 +95,7 @@ export default function serialize(
         //  ]
         // }
         const childrenHasLink = chunk.children.some(
-          (f) => !isLeafNode(f) && f.type === 'link'
+          (f) => !isLeafNode(f) && f.type === nodeTypes.link
         );
 
         return serialize(
@@ -193,7 +193,7 @@ export default function serialize(
       return `${printNewBlock(topNL)}> ${children}\n`;
 
     case nodeTypes.link:
-      return `[${children}](${(chunk as BlockType).link || ''})`;
+      return `[${children}](${(chunk as BlockType).url || ''})`;
 
     case nodeTypes.ul_list:
     case nodeTypes.ol_list:

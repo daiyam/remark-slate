@@ -185,7 +185,7 @@ Would result in the following:
     "children": [
       {
         "type": "link",
-        "link": "https://jackhanford.com",
+        "url": "https://jackhanford.com",
         "children": [
           {
             "text": "hyperkink"

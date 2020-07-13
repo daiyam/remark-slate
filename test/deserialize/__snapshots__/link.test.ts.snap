@@ -7,7 +7,7 @@ Object {
       "text": "Personal website",
     },
   ],
-  "link": "https://jackhanford.com",
   "type": "link",
+  "url": "https://jackhanford.com",
 }
 `;

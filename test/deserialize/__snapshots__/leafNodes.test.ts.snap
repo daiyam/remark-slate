@@ -103,7 +103,7 @@ Object {
       "type": "paragraph",
     },
   ],
-  "link": "https://jackhanford.com",
   "type": "link",
+  "url": "https://jackhanford.com",
 }
 `;

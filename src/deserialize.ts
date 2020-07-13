@@ -93,7 +93,7 @@ export default function deserialize(
     case 'paragraph':
       return { type: types.paragraph, children };
     case 'link':
-      return { type: types.link, link: node.url, children };
+      return { type: types.link, url: node.url, children };
     case 'blockquote':
       return { type: types.block_quote, children };
 
