@@ -17,6 +17,10 @@ export interface BlockType {
   url?: string;
   break?: boolean;
   children: Array<BlockType | LeafType>;
+  identifier?: string;
+  attributes?: any;
+  service?: string;
+  resource?: string;
 }
 
 interface Options {
@@ -35,6 +39,16 @@ const isBlockNode = (node: BlockType | LeafType): node is BlockType => {
 const isLeafNode = (node: BlockType | LeafType): node is LeafType => {
   return typeof (node as LeafType).text === 'string';
 };
+
+const isVoidNode = (node: BlockType | LeafType, nodeTypes: any): boolean => {
+  const block = (node as BlockType)
+  if(block.type) {
+    return block.type === nodeTypes.embed || block.type === nodeTypes.shortcode
+  }
+  else {
+    return false
+  }
+}
 
 const BREAK_TAG = '<br>';
 
@@ -145,32 +159,36 @@ export default function serialize(
     topNL = false
   }
 
-  if (children === '') return;
+  if (!isVoidNode(chunk, nodeTypes)) {
+    if (children === '') return;
 
-  // Never allow decorating break tags with rich text formatting,
-  // this can malform generated markdown
-  // Also ensure we're only ever applying text formatting to leaf node
-  // level chunks, otherwise we can end up in a situation where
-  // we try applying formatting like to a node like this:
-  // "Text foo bar **baz**" resulting in "**Text foo bar **baz****"
-  // which is invalid markup and can mess everything up
-  if (children !== BREAK_TAG && isLeafNode(chunk)) {
-    if (chunk.bold && chunk.italic) {
-      children = retainWhitespaceAndFormat(children, '***');
-    } else {
-      if (chunk.bold) {
-        children = retainWhitespaceAndFormat(children, '**');
+    // Never allow decorating break tags with rich text formatting,
+    // this can malform generated markdown
+    // Also ensure we're only ever applying text formatting to leaf node
+    // level chunks, otherwise we can end up in a situation where
+    // we try applying formatting like to a node like this:
+    // "Text foo bar **baz**" resulting in "**Text foo bar **baz****"
+    // which is invalid markup and can mess everything up
+    if (children !== BREAK_TAG && isLeafNode(chunk)) {
+      if (chunk.bold && chunk.italic) {
+        children = retainWhitespaceAndFormat(children, '***');
+      } else {
+        if (chunk.bold) {
+          children = retainWhitespaceAndFormat(children, '**');
+        }
+
+        if (chunk.italic) {
+          children = retainWhitespaceAndFormat(children, '_');
+        }
       }
 
-      if (chunk.italic) {
-        children = retainWhitespaceAndFormat(children, '_');
+      if (chunk.strikeThrough) {
+        children = `~~${children}~~`;
       }
-    }
-
-    if (chunk.strikeThrough) {
-      children = `~~${children}~~`;
     }
   }
+
+  const block = (chunk as BlockType)
 
   switch (type) {
     case nodeTypes.heading[1]:
@@ -193,7 +211,7 @@ export default function serialize(
       return `${printNewBlock(topNL)}> ${children}\n`;
 
     case nodeTypes.link:
-      return `[${children}](${(chunk as BlockType).url || ''})`;
+      return `[${children}](${block.url || ''})`;
 
     case nodeTypes.ul_list:
     case nodeTypes.ol_list:
@@ -215,6 +233,18 @@ export default function serialize(
 
     case nodeTypes.paragraph:
       return `${printNewBlock(topNL)}${children}\n`;
+
+    case nodeTypes.embed:
+      return `${printNewBlock(topNL)}[[${block.service} id="${block.resource}"]]\n`;
+
+    case nodeTypes.shortcode:
+      let attributes = ''
+
+      Object.entries(block.attributes).forEach(([key, value]) => {
+        attributes += ` ${key}="${value}"`
+      })
+
+      return `${printNewBlock(topNL)}[[${block.identifier}${attributes}]]\n`;
 
     default:
       if(isLeafNode(chunk)) {

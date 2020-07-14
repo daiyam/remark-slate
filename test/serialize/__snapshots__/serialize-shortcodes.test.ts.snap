@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Serialize a single embed 1`] = `
+"[[youtube id=\\"YE7VzlLtp-4\\"]]
+"
+`;
+
+exports[`Serialize a single shortcode 1`] = `
+"[[MailchimpForm id=\\"chfk2\\"]]
+"
+`;

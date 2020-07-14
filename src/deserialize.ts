@@ -13,6 +13,8 @@ export interface NodeTypes {
     5?: string;
     6?: string;
   };
+  embed?: string;
+  shortcode?: string;
 }
 
 export interface OptionType {
@@ -32,6 +34,8 @@ export interface MdastNode {
   spread?: any;
   checked?: any;
   indent?: any;
+  identifier?: string;
+  attributes?: any;
 }
 
 export const defaultNodeTypes = {
@@ -49,6 +53,8 @@ export const defaultNodeTypes = {
     5: 'heading_five',
     6: 'heading_six',
   },
+  embed: 'embed',
+  shortcode: 'shortcode',
 };
 
 export default function deserialize(
@@ -129,6 +135,24 @@ export default function deserialize(
 
     case 'break':
       return { text: '\n' };
+
+    case 'shortcode':
+      if (node.identifier === 'youtube') {
+        return {
+          type: types.embed,
+          service: node.identifier,
+          resource: node.attributes.id || '',
+          children: [{ text: '' }]
+        };
+      }
+      else {
+        return {
+          type: types.shortcode,
+          identifier: node.identifier,
+          attributes: node.attributes || {},
+          children: [{ text: '' }]
+        };
+      }
 
     case 'text':
     default:

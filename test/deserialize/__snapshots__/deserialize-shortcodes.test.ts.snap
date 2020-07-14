@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`deserialize generic shortcode 1`] = `
+Object {
+  "attributes": Object {
+    "id": "chfk2",
+  },
+  "children": Array [
+    Object {
+      "text": "",
+    },
+  ],
+  "identifier": "MailchimpForm",
+  "type": "shortcode",
+}
+`;
+
+exports[`deserialize youtube embed 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "text": "",
+    },
+  ],
+  "resource": "YE7VzlLtp-4",
+  "service": "youtube",
+  "type": "embed",
+}
+`;
