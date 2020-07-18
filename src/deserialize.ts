@@ -132,6 +132,12 @@ export default function deserialize(
         ...forceLeafNode(children),
         ...persistLeafFormats(children),
       };
+    case 'underline':
+      return {
+        underline: true,
+        ...forceLeafNode(children),
+        ...persistLeafFormats(children),
+      };
 
     case 'break':
       return { text: '\n' };

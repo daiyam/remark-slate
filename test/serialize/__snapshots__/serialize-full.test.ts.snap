@@ -7,7 +7,7 @@ exports[`Serializes large slate object into markdown document 1`] = `
 
 **Bold**
 
-_Italic_
+*Italic*
 
 ~~Strike through~~
 
@@ -15,7 +15,7 @@ _Italic_
 
 [Google](https://google.com)
 
-> He said _whattttt_?
+> He said *whattttt*?
 
 1. OL L1 I1
 1. OL L1 I2

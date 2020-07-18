@@ -1,0 +1,6 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Serialize an underline paragraph from slate state to markdown 1`] = `
+"__underline paragraph__
+"
+`;

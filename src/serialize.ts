@@ -8,6 +8,7 @@ export interface LeafType {
   strikeThrough?: boolean;
   bold?: boolean;
   italic?: boolean;
+  underline?: boolean;
   parentType?: string;
 }
 
@@ -178,12 +179,16 @@ export default function serialize(
         }
 
         if (chunk.italic) {
-          children = retainWhitespaceAndFormat(children, '_');
+          children = retainWhitespaceAndFormat(children, '*');
         }
       }
 
       if (chunk.strikeThrough) {
         children = `~~${children}~~`;
+      }
+
+      if (chunk.underline) {
+        children = `__${children}__`;
       }
     }
   }

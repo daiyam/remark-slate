@@ -21,6 +21,6 @@ exports[`Serialize a strikeThrough paragraph from slate state to markdown 1`] = 
 `;
 
 exports[`Serialize an italic paragraph from slate state to markdown 1`] = `
-"_italic paragraph_
+"*italic paragraph*
 "
 `;

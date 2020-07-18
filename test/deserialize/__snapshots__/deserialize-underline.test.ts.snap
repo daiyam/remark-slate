@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Deserialize a leaf node with just underline 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "text": "Underline text",
+      "underline": true,
+    },
+  ],
+  "type": "paragraph",
+}
+`;
