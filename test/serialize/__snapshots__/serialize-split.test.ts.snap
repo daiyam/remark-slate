@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Serialize a bold paragraph splitted by a space 1`] = `
+"**bold** **paragraph**
+"
+`;
+
+exports[`Serialize a bold paragraph splitted by an italic word no spaces at all 1`] = `
+"**bold and*****italic*****paragraph**
+"
+`;
+
+exports[`Serialize a bold paragraph splitted by an italic word with spaces 1`] = `
+"**bold and** ***italic*** **paragraph**
+"
+`;
+
+exports[`Serialize a bold paragraph splitted by an italic word without spaces 1`] = `
+"**bold and** ***italic*** **paragraph**
+"
+`;
+
+exports[`Serialize a bold paragraph with a continuous split 1`] = `
+"**bold para****graph**
+"
+`;

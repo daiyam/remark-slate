@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Deserialize a bold paragraph splitted by a space 1`] = `
+Array [
+  Object {
+    "children": Array [
+      Object {
+        "bold": true,
+        "text": "bold",
+      },
+      Object {
+        "text": " ",
+      },
+      Object {
+        "bold": true,
+        "text": "paragraph",
+      },
+    ],
+    "type": "paragraph",
+  },
+]
+`;
+
+exports[`Deserialize a bold paragraph with a continuous split 1`] = `
+Array [
+  Object {
+    "children": Array [
+      Object {
+        "bold": true,
+        "text": "bold para",
+      },
+      Object {
+        "bold": true,
+        "text": "graph",
+      },
+    ],
+    "type": "paragraph",
+  },
+]
+`;

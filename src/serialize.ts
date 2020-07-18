@@ -140,8 +140,6 @@ export default function serialize(
               ? listDepth + 1
               : listDepth,
           },
-          /* !(!type && i === 0) */
-          // !(isList || (!type && i === 0))
           i !== 0
         );
       })
